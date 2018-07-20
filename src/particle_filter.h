@@ -9,6 +9,7 @@
 #ifndef PARTICLE_FILTER_H_
 #define PARTICLE_FILTER_H_
 
+#include <random>
 #include "helper_functions.h"
 
 struct Particle {
@@ -20,24 +21,35 @@ struct Particle {
 	std::vector<int> associations;
 	std::vector<double> sense_x;
 	std::vector<double> sense_y;
+
+	Particle() {
+	}
+
+	Particle(int id_, double x_, double y_, double theta_, double weight_)
+	: id(id_)
+	, x(x_)
+	, y(y_)
+	, theta(theta_)
+	, weight(weight_) {
+	}
 };
 
 class ParticleFilter {
 	// Number of particles to draw
 	int num_particles;
 
-
-
 	// Flag, if filter is initialized
 	bool is_initialized;
 
-	// Vector of weights of all particles
-	std::vector<double> weights;
+private:
+	std::default_random_engine gen;
 
 public:
 
 	// Set of current particles
 	std::vector<Particle> particles;
+	
+	std::vector<double> weights;
 
 	// Constructor
 	// @param num_particles Number of particles
@@ -78,7 +90,7 @@ public:
 	 * @param predicted Vector of predicted landmark observations
 	 * @param observations Vector of landmark observations
 	 */
-	void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
+	void dataAssociation(std::vector<const Map::single_landmark_s *>& predicted, std::vector<LandmarkObs>& observations);
 
 	/**
 	 * updateWeights Updates the weights for each particle based on the likelihood of the 
@@ -101,7 +113,7 @@ public:
 	 * Set a particles list of associations, along with the associations calculated world x,y coordinates
 	 * This can be a very useful debugging tool to make sure transformations are correct and assocations correctly connected
 	 */
-	Particle SetAssociations(Particle& particle, const std::vector<int>& associations,
+	Particle& SetAssociations(Particle& particle, const std::vector<int>& associations,
 			const std::vector<double>& sense_x, const std::vector<double>& sense_y);
 
 

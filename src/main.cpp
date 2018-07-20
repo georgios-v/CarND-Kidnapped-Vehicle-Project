@@ -99,7 +99,7 @@ int main() {
 							std::istream_iterator<float>(),
 							std::back_inserter(y_sense));
 
-					for (int i = 0; i < x_sense.size(); i++) {
+					for (uint i = 0; i < x_sense.size(); i++) {
 						LandmarkObs obs;
 						obs.x = x_sense[i];
 						obs.y = y_sense[i];
@@ -123,8 +123,8 @@ int main() {
 						}
 						weight_sum += particles[i].weight;
 					}
-					cout << "highest w " << highest_weight << endl;
-					cout << "average w " << weight_sum / num_particles << endl;
+					//cout << "highest w " << highest_weight << endl;
+					//cout << "average w " << weight_sum / num_particles << endl;
 
 					json msgJson;
 					msgJson["best_particle_x"] = best_particle.x;
